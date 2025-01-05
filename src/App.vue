@@ -1,47 +1,47 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import Menu from './components/MenuClient.vue'
+import Logging from "@/components/Logging.vue";
+</script>
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      message: '',
+      clientConnected: true,
+    };
+  },
+  methods: {
+    fetchMessage() {
+      axios.get('http://localhost:8080/test')
+          .then(response => {
+            this.message = response.data.message;
+            console.log(response);
+          })
+          .catch(error => {
+            console.error('Error fetching message:', error);
+          });
+    }
+  }
+};
 </script>
 
 <template>
+  <div class="container">
   <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
+    <Menu v-if="clientConnected" />
   </header>
-
+  <div class="leftMenu">
+    left
+  </div>
   <main>
-    <TheWelcome />
+    <Logging v-if="clientConnected" />
+    <div v-else>test</div>
   </main>
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>

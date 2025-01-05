@@ -57,8 +57,31 @@
   margin: 0;
   font-weight: normal;
 }
+header {
+
+  grid-column: 1 / 4;
+}
+main {
+  grid-column: 2 / 4;
+  grid-row: 2 / 4;
+}
+.leftMenu {
+  grid-column: 1;
+  grid-row: 2 / 4;
+}
+.container {
+  display: grid;
+  grid-template-columns: 1fr 4fr 4fr; /* Flexible proportions */
+  grid-template-rows: 1fr 4fr 4fr;
+  gap: 10px;
+
+  width: 100vw; /* Full viewport width */
+  height: 100vh; /* Full viewport height */
+}
 
 body {
+
+
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
