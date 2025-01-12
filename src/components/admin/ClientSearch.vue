@@ -1,4 +1,5 @@
 <script setup>
+import CreateClient from "@/components/admin/CreateClient.vue";
 </script>
 <script>
 import axios from "axios";
@@ -15,15 +16,11 @@ export default {
           .get("http://localhost:8080/clientsearch")
           .then((response) => {
             this.message = response.data;
-            console.log(response);
           })
           .catch((error) => {
             console.error("Error fetching message:", error);
           });
     },
-    clientSelect(client){
-      console.log(client);
-    }
   },
   mounted() {
     this.clientSearch();
@@ -33,15 +30,15 @@ export default {
 
 <template>
   <div>
-    <!-- Dynamically generate the options -->
-    <select v-model="selectedClients" multiple @change="clientSelect">
+    <select
+        v-model="selectedClients"
+        multiple
+        @change="$emit('clientSelect', selectedClients)">
       <option v-for="(value, key) in message" :key="key" :value="key">
         {{ value }}
       </option>
     </select>
   </div>
-
-
 </template>
 
 <style scoped>

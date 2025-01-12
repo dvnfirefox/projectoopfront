@@ -13,7 +13,7 @@
     /><br>
     <label for="NIP">NIP:</label><br>
     <input
-        type="text"
+        type="password"
         id="NIP"
         v-model="formData.NIP"
         required
@@ -46,7 +46,7 @@ export default {
           .then(data => {
             if ('id' in data) {
               console.log("ID found in response:", data.id);
-              this.$emit("updateClient", true, data.admin);
+              this.$emit("updateClient", true, data.admin, data.id);
             } else {
               console.log("ID not found in the response.");
             }
