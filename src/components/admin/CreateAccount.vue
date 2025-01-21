@@ -9,7 +9,14 @@
       <option value="2">Saving</option>
       <option value="3">Mortgage</option>
       <option value="4">Line of Credit</option>
-    </select>
+    </select><br>
+    <label for="name">account name:</label><br>
+    <input
+        type="text"
+        id="name"
+        v-model="formData.name"
+        required
+    /><br>
     <button type="submit">Submit</button>
   </form>
   <div>status: {{ message }}</div>
@@ -23,6 +30,7 @@ export default {
       formData: {
         code: this.clientManagerId,
         type: "",
+        name: "",
       },
       message:""
     };

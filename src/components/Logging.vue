@@ -20,12 +20,16 @@
     /><br><br>
     <button type="submit">Submit</button>
   </form>
+  <div>
+    {{this.message}}
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
+      message: "",
       formData: {
         Code: "",
         NIP: ""
@@ -48,7 +52,8 @@ export default {
               console.log("ID found in response:", data.id);
               this.$emit("updateClient", true, data.admin, data.id);
             } else {
-              console.log("ID not found in the response.");
+              this.message = data.message;
+              console.log(data.message);
             }
           })
           .catch(error => {

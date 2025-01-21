@@ -41,8 +41,10 @@
     /><br>
     <label for="nip">NIP:</label><br>
     <input
-        type="text"
+        type="number"
         id="nip"
+        maxlength="4"
+        minlength="4"
         v-model="formData.nip"
         required
     /><br>

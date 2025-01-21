@@ -16,6 +16,10 @@ import Logging from "@/components/Logging.vue";
 import TheWelcome from "@/components/TheWelcome.vue";
 import AccountListing from "@/components/AccountListing.vue";
 import accountListing from "@/components/AccountListing.vue";
+import HelloWorld from "@/components/HelloWorld.vue";
+import Account from "@/components/client/Account.vue";
+import {markRaw, shallowRef} from "vue";
+import WelcomeItem from "@/components/WelcomeItem.vue";
 
 export default {
   data() {
@@ -27,6 +31,7 @@ export default {
       mainView: Logging,
       leftView: null,
       clientManagerId: null,
+      accountId: "0",
     };
   },
 
@@ -47,12 +52,11 @@ export default {
       this.clientConnected = clientConnected;
       this.admin = admin;
       this.clientId = id;
-      console.log(id);
 
       if (clientConnected && admin) {
         this.mainView = CreateClient
       }else(
-          this.changeMainView(TheWelcome, accountListing)
+          this.changeMainView(null, markRaw(AccountListing))
       )
     },
 
@@ -65,8 +69,29 @@ export default {
       this.mainView = Transaction;
       this.leftView = ManagerMenu;
       this.clientManagerId = id[0];
-      console.log(this.clientManagerId);
     },
+    accountView(accountId ) {
+      this.accountId = accountId[0].toString();
+      // this.leftView = shallowRef(AccountListing);
+      this.mainView = markRaw(Account);
+      console.log(this.accountId);
+    },
+    clientUnblock(){
+      fetch("http://localhost:8080/unblock", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: this.clientManagerId
+      })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+          })
+          .catch(error => {
+            console.error("Error:", error);
+          });
+    }
   },
 }
 </script>
@@ -78,14 +103,13 @@ export default {
       <AdminMenu v-if="clientConnected && admin" @adminMenu="changeMainView"  />
     </header>
     <div class="leftMenu">
-      <component :is="leftView" @clientManagerMenu="changeMainView" :clientId="clientId"/>
+      <component :is="leftView" @clientManagerMenu="changeMainView" @unblockClient="clientUnblock" @accountSelect="accountView" :clientId="clientId" :clientManagerId="clientManagerId" />
     </div>
     <main>
-      <component :is="mainView" @updateClient="setClient" @clientSelect="clientManagerViewSetup" :clientManagerId="clientManagerId"  />
+      <component :is="mainView" @updateClient="setClient" @clientSelect="clientManagerViewSetup" :clientManagerId="clientManagerId" :accountId="accountId" :clientId="clientId" :admin="admin"/>
     </main>
   </div>
 </template>
 
 <style scoped>
-/* Add any styling you need */
 </style>

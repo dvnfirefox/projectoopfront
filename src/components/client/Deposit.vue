@@ -10,6 +10,7 @@
         id="amount"
         value= 0
         v-model="formData.amount"
+        step="0.01"
         required
     />
     <br><br>
@@ -22,20 +23,26 @@
 
 <script>
 export default {
+  props: ["accountId"],
   data() {
     return {
       message: "",
       formData: {
         amount: 0,
+        accountId: this.accountId,
       }
     };
   },
-
+  watch: {
+    accountId(newval){
+      this.formData.accountId = newval;
+    }
+  },
 
   methods: {
     handleSubmit() {
       this.formData.accountId = this.accountId;
-      fetch("http://localhost:8080/depositPaper", {
+      fetch("http://localhost:8080/deposit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -44,7 +51,14 @@ export default {
       })
           .then(response => response.json())
           .then(data => {
-              this.message = data.statut;
+            if(data.statut === true){
+              this.formData.amount = 0;
+              this.$emit("updateBalance", data.balance);
+              this.message = data.message;
+            }else{
+              this.message = data.message;
+              this.formData.amount = 0;
+            }
           })
           .catch(error => {
             console.error("Error:", error);

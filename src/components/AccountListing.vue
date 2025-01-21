@@ -24,7 +24,17 @@ export default {
             console.error("Error fetching message:", error);
           });
     },
+    listAccount(value) {
+      try {
+        return value.name;
+      }catch(error) {
+        console.log(value)
+        return error;
+      }
+
+    },
   },
+
   mounted() {
     this.accountListing();
   },
@@ -33,15 +43,11 @@ export default {
 <template>
   <div>
     <select
-        v-model="selectedAcccount"
+        v-model="selectedAccount"
         multiple
         @change="$emit('accountSelect', selectedAccount)">
-      <option v-for="(value, key) in message" :key="key" :value="value">
-        <div v-if="value === '1'">checking</div>
-        <div v-if="value === '1'">checking</div>
-        <div v-if="value === '1'">checking</div>
-        <div v-if="value === '1'">checking</div>
-
+      <option v-for="(value, key) in message" :key="key" :value="key">
+        {{ listAccount(value) }}
       </option>
     </select>
   </div>
